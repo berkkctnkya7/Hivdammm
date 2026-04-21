@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>İYİKİ DOĞDUN HIVDAMMM</title>
+<!-- WhatsApp / Instagram / sosyal medya önizleme kapağı -->
+<meta property="og:title" content="İYİKİİ DOĞDUNNN HIVDAMMM ">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://berkkctnkya7.github.io/iyikidogdunn/kapak.jpeg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://berkkctnkya7.github.io/iyikidogdunn">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://berkkctnkya7.github.io/iyikidogdunn/kapak.jpeg">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body {
+  width:100%; height:100%;
+  overflow:hidden; background:#000;
+  /* iOS overscroll engelle */
+  overscroll-behavior:none;
+  -webkit-overflow-scrolling:none;
+}
+.scene {
+  width:100vw;
+  height:100vh;
+  height:100svh; /* small viewport height — iOS address bar dahil */
+  position:relative; overflow:hidden;
+  background:radial-gradient(ellipse at 40% 30%,#f2d4d4 0%,#e8b4b8 35%,#d4909a 70%,#c07880 100%);
+  touch-action:manipulation;
+}
+@supports (-webkit-touch-callout: none) {
+  .scene {
+    height: -webkit-fill-available;
+    /* iOS safe area padding */
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
+canvas:not(#flowerRibbonCanvas):not(#heartCanvas) { position:absolute; top:0; left:0; width:100%; height:100%; }
+#cakeCanvas { z-index:2; }
+#confCanvas { z-index:3; pointer-events:none; }
+#burstCanvas { z-index:31; pointer-events:none; }
+#bannerCanvas { pointer-events:none; }
+.hint {
+  position:absolute; top:clamp(14px,3vh,28px); left:0; right:0;
+  text-align:center; z-index:10;
+  font-family:Georgia,serif; font-size:clamp(.9em,4vw,1.1em);
+  color:rgba(255,255,255,.9);
+  text-shadow:0 1px 6px rgba(100,0,40,.7);
+  opacity:0; transition:opacity .8s;
+  pointer-events:none;
+  padding:0 12px;
+}
+#giftBtn {
+  position:absolute;
+  left:50%; transform:translateX(-50%);
+  z-index:25;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity 0.7s ease;
+  cursor:pointer;
+  border:none; background:none; padding:12px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action:manipulation;
+}
+#giftBtn.visible {
+  opacity:1;
+  pointer-events:auto;
+}
+#giftBtn img {
+  height: clamp(80px, 22vw, 160px);
+  width: auto;
+  display:block;
+  filter: drop-shadow(0 4px 16px rgba(120,0,200,0.55));
+}
+
+/* ── ÇİÇEK EKRANI ── */
+#flowerScreen {
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  z-index:30;
+  opacity:0; pointer-events:none;
+  user-select:none; -webkit-user-select:none;
+  background:radial-gradient(ellipse at 40% 30%,#2e3f6e 0%,#1e2d56 40%,#151f3e 75%,#0e1530 100%);
+}
+#flowerScreen.active { pointer-events:auto; }
+
+/* Çiçek + yazı — kalbin üzerinde ortalanmış */
+#flowerContent {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  pointer-events: none;
+}
+
+/* Çiçek tam ortada */
+#flowerWrap {
+  transform: scale(0);
+  opacity:0;
+  will-change: transform, opacity;
+  user-select:none; -webkit-user-select:none;
+  flex-shrink:0;
+  /* Çiçeği yukarı kaydır — yazı aşağıda kalsın */
+  margin-bottom: 0;
+}
+
+/* Yazı kalbin alt kısmına — absolute ile konumlandır */
+#flowerRibbonWrap {
+  position: absolute;
+  bottom: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 48px);
+  max-width: 420px;
+  z-index: 35;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.6s;
+  text-align: center;
+  padding: 16px 28px;
+  background: rgba(220,130,150,0.22);
+  border: 1.5px solid rgba(240,160,180,0.45);
+  border-radius: 18px;
+  box-shadow:
+    0 0 18px rgba(220,100,140,0.3),
+    inset 0 0 14px rgba(255,180,200,0.08);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+#flowerWrap.bloom {
+  animation: flowerBloom 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+@keyframes flowerBloom {
+  0%   { transform: scale(0) rotate(-12deg) translateY(40px); opacity:0; filter:blur(8px) brightness(1.5); }
+  30%  { opacity:1; filter:blur(2px) brightness(1.3); }
+  60%  { transform: scale(1.12) rotate(3deg) translateY(-8px); filter:blur(0px) brightness(1.05); }
+  80%  { transform: scale(0.96) rotate(-1deg) translateY(3px); }
+  92%  { transform: scale(1.04) rotate(1deg) translateY(-2px); }
+  100% { transform: scale(1) rotate(0deg) translateY(0px); opacity:1; filter:blur(0px) brightness(1); }
+}
+#flowerImg {
+  width: clamp(220px, 60vw, 480px);
+  height: auto;
+  display:block;
+  filter: drop-shadow(0 14px 40px rgba(120,0,180,0.45));
+  user-select: none;
+  -webkit-user-select: none;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  -webkit-touch-callout: none;
+}
+
+@media (max-height: 700px) {
+  #flowerImg { width: clamp(180px, 52vw, 360px); }
+}
+@media (min-width: 768px) {
+  #flowerImg { width: clamp(280px, 40vw, 480px); }
+}
+
+/* burst canvas */
+#burstCanvas {
+  position:absolute; top:0; left:0; width:100%; height:100%;
+  z-index:31; pointer-events:none;
+}
+
+#flowerRibbonWrap.show { opacity:1; }
+#flowerText {
+  font-family: Georgia, serif;
+  font-style: italic;
+  font-weight: bold;
+  font-size: clamp(15px, 4vw, 20px);
+  color: #ffe0ec;
+  text-shadow:
+    0 0 16px rgba(255,140,180,0.7),
+    0 2px 8px rgba(0,0,0,0.5);
+  line-height: 1.6;
+  letter-spacing: 0.03em;
+}
+
+/* ── KALP ANİMASYONU — tam ekran arka plan katmanı ── */
+#heartWrap {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+  background: transparent;
+  pointer-events: none;
+}
+#heartWrap.show { opacity: 1; }
+
+#heartCanvas {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100% !important;
+  height: 100% !important;
+}
+</style>
+</head>
+<body>
+<div class="scene" id="scene">
+  <canvas id="cakeCanvas"></canvas>
+  <canvas id="confCanvas"></canvas>
+  <canvas id="bannerCanvas" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:11;pointer-events:none;"></canvas>
+  <div class="hint" id="hint"></div>
+  <button id="giftBtn" onclick="openFlower()">
+    <img src="buton.png" alt="Hediyeyi Aç">
+  </button>
+
+  <!-- Çiçek ekranı -->
+  <div id="flowerScreen">
+    <!-- Kalp animasyonu — tam ekran arka plan -->
+    <div id="heartWrap">
+      <canvas id="heartCanvas"></canvas>
+    </div>
+    <!-- Çiçek ve yazı — kalbin üzerinde -->
+    <div id="flowerContent">
+      <div id="flowerWrap">
+        <img id="flowerImg" src="çiçek.png" alt="Çiçek">
+      </div>
+      <div id="flowerRibbonWrap">
+        <p id="flowerText">
+          çiçekler senin kadar güzel değill<br>
+          amaa yapıcak bişey yokkk bitaneemmm
+        </p>
+      </div>
+    </div>
+  </div>
+  <canvas id="burstCanvas"></canvas>
+</div>
+
+<script>
+/* ════════════════════════════════════════
+   PASTA & KONFETI & BANNER (orijinal kod)
+════════════════════════════════════════ */
+const scene = document.getElementById('scene');
+
+// iOS'ta innerWidth/Height en güvenilir yöntem — DOMContentLoaded sonrası
+const DPR = Math.min(window.devicePixelRatio || 1, 3); // max 3x
+const W = scene.offsetWidth  || window.innerWidth  || 390;
+const H = scene.offsetHeight || window.innerHeight || 844;
+const cx = W/2;
+const SCALE = Math.min(W / 390, 1.4); // iPhone 14 Pro referans genişliği
+
+// DPR yardımcısı: canvas'ı retina'ya hazırla, ctx'i scale et
+function setupHiDPICanvas(canvas, w, h){
+  canvas.width  = Math.round(w * DPR);
+  canvas.height = Math.round(h * DPR);
+  canvas.style.width  = w + 'px';
+  canvas.style.height = h + 'px';
+  const c = canvas.getContext('2d');
+  c.scale(DPR, DPR);
+  return c;
+}
+
+const cc = document.getElementById('confCanvas');
+const cctx = setupHiDPICanvas(cc, W, H);
+const pcols=['#fff','#ffe4ec','#ffd6e0','#fff9c4','#b3e5fc','#f8bbd0','#ffe082','#c8e6c9'];
+const parts=Array.from({length:70},()=>({
+  x:Math.random()*W, y:Math.random()*H,
+  r:Math.random()*4+2,
+  dx:(Math.random()-.5)*.5, dy:Math.random()*.45+.1,
+  col:pcols[Math.floor(Math.random()*pcols.length)],
+  a:Math.random()*.5+.3, p:Math.random()*Math.PI*2,
+  shape:Math.random()>.4?'circle':'rect',
+  rot:Math.random()*Math.PI*2, dr:(Math.random()-.5)*.05
+}));
+
+const cannons=[];
+const cannonCols=['#ff2d55','#ff9500','#ffcc00','#34c759','#007aff','#af52de','#ff6b9d','#ffffff'];
+
+function spawnCannon(ox,oy,goRight){
+  const base = goRight ? -Math.PI*0.25 : -Math.PI*0.75;
+  const spread = Math.PI*0.45;
+  for(let i=0;i<60;i++){
+    const angle = base + (Math.random()-0.5)*spread;
+    const speed = 10 + Math.random()*14;
+    const type = ['rect','rect','rect','circle','star'][Math.floor(Math.random()*5)];
+    cannons.push({
+      x:ox, y:oy,
+      vx:Math.cos(angle)*speed,
+      vy:Math.sin(angle)*speed,
+      grav:0.25+Math.random()*0.1,
+      drag:0.985,
+      col:cannonCols[Math.floor(Math.random()*cannonCols.length)],
+      alpha:1,
+      fade:0.006+Math.random()*0.005,
+      rot:Math.random()*Math.PI*2,
+      spin:(Math.random()-0.5)*0.25,
+      type,
+      w:8+Math.random()*8,
+      h:4+Math.random()*4,
+      r:5+Math.random()*4
+    });
+  }
+}
+
+function updateAndDrawCannons(){
+  for(let i=cannons.length-1;i>=0;i--){
+    const p=cannons[i];
+    p.vx*=p.drag; p.vy+=p.grav; p.x+=p.vx; p.y+=p.vy;
+    p.rot+=p.spin; p.alpha-=p.fade;
+    if(p.alpha<=0 || p.y>H+40){ cannons.splice(i,1); continue; }
+    cctx.save(); cctx.globalAlpha=p.alpha; cctx.fillStyle=p.col;
+    cctx.translate(p.x, p.y); cctx.rotate(p.rot);
+    if(p.type==='circle'){
+      cctx.beginPath(); cctx.arc(0,0,p.r,0,Math.PI*2); cctx.fill();
+    } else if(p.type==='star'){
+      cctx.beginPath();
+      for(let j=0;j<10;j++){
+        const a=j*Math.PI/5-Math.PI/2;
+        const r=j%2===0?p.r:p.r*0.4;
+        j===0?cctx.moveTo(Math.cos(a)*r,Math.sin(a)*r):cctx.lineTo(Math.cos(a)*r,Math.sin(a)*r);
+      }
+      cctx.closePath(); cctx.fill();
+    } else { cctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); }
+    cctx.restore();
+  }
+}
+
+(function confLoop(){
+  cctx.clearRect(0,0,W,H);
+  parts.forEach(p=>{
+    p.p+=.022; p.x+=p.dx; p.y+=p.dy; p.rot+=p.dr;
+    if(p.y>H){p.y=-8; p.x=Math.random()*W;}
+    if(p.x<0)p.x=W; if(p.x>W)p.x=0;
+    const a=p.a*(.6+.4*Math.sin(p.p));
+    cctx.save(); cctx.globalAlpha=a; cctx.fillStyle=p.col;
+    if(p.shape==='circle'){cctx.beginPath();cctx.arc(p.x,p.y,p.r,0,Math.PI*2);cctx.fill();}
+    else{cctx.translate(p.x,p.y);cctx.rotate(p.rot);cctx.fillRect(-p.r,-p.r/2,p.r*2,p.r);}
+    cctx.restore();
+  });
+  updateAndDrawCannons();
+  requestAnimationFrame(confLoop);
+})();
+
+const ck = document.getElementById('cakeCanvas');
+const ctx = setupHiDPICanvas(ck, W, H);
+
+const charImg = new Image();
+charImg.src = 'damla.png';
+const kittyImg = new Image();
+kittyImg.src = 'hellokitty.png';
+
+let prog=0, ft=0, textDone=false;
+let lastTime=null;
+const ANIM_DURATION = 2200;
+
+const candleOn=[true,true,true];
+const smokes=[];
+
+const layers=[
+  {prog:0, vy:0, y:0, settled:false, bounceCount:0},
+  {prog:0, vy:0, y:0, settled:false, bounceCount:0},
+  {prog:0, vy:0, y:0, settled:false, bounceCount:0},
+];
+const candleLayer={prog:0, vy:0, y:0, settled:false};
+
+const GRAVITY = 0.08;
+const BOUNCE_DAMPING = 0.42;
+const BOUNCE_THRESHOLD = 0.8;
+
+function easeOut(t){return 1-Math.pow(1-t,3);}
+function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+
+function roundRect(c,x,y,w,h,r){
+  c.beginPath();
+  c.moveTo(x+r,y); c.lineTo(x+w-r,y); c.quadraticCurveTo(x+w,y,x+w,y+r);
+  c.lineTo(x+w,y+h-r); c.quadraticCurveTo(x+w,y+h,x+w-r,y+h);
+  c.lineTo(x+r,y+h); c.quadraticCurveTo(x,y+h,x,y+h-r);
+  c.lineTo(x,y+r); c.quadraticCurveTo(x,y,x+r,y);
+  c.closePath();
+}
+
+function drawPlate(cx2, baseY, pp) {
+  if (pp <= 0) return;
+  const plateW  = 240 * SCALE * pp;
+  const rx      = plateW / 2;
+  const rimH    = 11;
+  const rimRy   = 9;
+  const innerRx = rx * 0.72;
+  const innerRy = 6;
+  ctx.save();
+  const shadowG = ctx.createRadialGradient(cx2, baseY + 18, rx * 0.2, cx2, baseY + 18, rx * 1.15);
+  shadowG.addColorStop(0, 'rgba(0,0,0,0.32)');
+  shadowG.addColorStop(0.6, 'rgba(0,0,0,0.14)');
+  shadowG.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.beginPath();
+  ctx.ellipse(cx2, baseY + 18, rx * 1.15, rimRy * 1.6, 0, 0, Math.PI * 2);
+  ctx.fillStyle = shadowG; ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(cx2, baseY + rimH, rx, rimRy, 0, 0, Math.PI * 2);
+  const edgeBot = ctx.createRadialGradient(cx2, baseY + rimH, innerRx * 0.5, cx2, baseY + rimH, rx);
+  edgeBot.addColorStop(0, '#d8d8d8'); edgeBot.addColorStop(0.7, '#b0b0b0'); edgeBot.addColorStop(1, '#888');
+  ctx.fillStyle = edgeBot; ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(cx2, baseY, rx, rimRy, 0, 0, Math.PI);
+  ctx.ellipse(cx2, baseY + rimH, rx, rimRy, 0, Math.PI, 0, true);
+  ctx.closePath();
+  const sideG = ctx.createLinearGradient(cx2 - rx, baseY, cx2 + rx, baseY);
+  sideG.addColorStop(0,'#9e9e9e'); sideG.addColorStop(0.12,'#e8e8e8');
+  sideG.addColorStop(0.35,'#ffffff'); sideG.addColorStop(0.5,'#f0f0f0');
+  sideG.addColorStop(0.65,'#ffffff'); sideG.addColorStop(0.88,'#e0e0e0'); sideG.addColorStop(1,'#9e9e9e');
+  ctx.fillStyle = sideG; ctx.fill();
+  ctx.beginPath(); ctx.ellipse(cx2, baseY, rx, rimRy, 0, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(255,255,255,0.85)'; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.beginPath(); ctx.ellipse(cx2, baseY, rx, rimRy, 0, 0, Math.PI * 2);
+  const topG = ctx.createRadialGradient(cx2-rx*0.3, baseY-rimRy*0.4, rx*0.05, cx2, baseY, rx);
+  topG.addColorStop(0,'#ffffff'); topG.addColorStop(0.25,'#f9f9f9'); topG.addColorStop(0.55,'#f0f0f0');
+  topG.addColorStop(0.78,'#e4e4e4'); topG.addColorStop(0.92,'#d6d6d6'); topG.addColorStop(1,'#c8c8c8');
+  ctx.fillStyle = topG; ctx.fill();
+  ctx.beginPath(); ctx.ellipse(cx2, baseY, innerRx, innerRy, 0, 0, Math.PI * 2);
+  const wellG = ctx.createRadialGradient(cx2-innerRx*0.25,baseY-innerRy*0.35,innerRx*0.05, cx2,baseY,innerRx);
+  wellG.addColorStop(0,'#ffffff'); wellG.addColorStop(0.4,'#f5f5f5'); wellG.addColorStop(0.8,'#ebebeb'); wellG.addColorStop(1,'#dcdcdc');
+  ctx.fillStyle = wellG; ctx.fill();
+  ctx.beginPath(); ctx.ellipse(cx2, baseY, innerRx, innerRy, 0, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(0,0,0,0.10)'; ctx.lineWidth = 2.5; ctx.stroke();
+  ctx.beginPath();
+  ctx.ellipse(cx2-rx*0.38,baseY-rimRy*0.55,rx*0.22,rimRy*0.35,-0.3,0,Math.PI*2);
+  const specG = ctx.createRadialGradient(cx2-rx*0.38,baseY-rimRy*0.55,0,cx2-rx*0.38,baseY-rimRy*0.55,rx*0.22);
+  specG.addColorStop(0,'rgba(255,255,255,0.88)'); specG.addColorStop(0.5,'rgba(255,255,255,0.35)'); specG.addColorStop(1,'rgba(255,255,255,0)');
+  ctx.fillStyle = specG; ctx.fill();
+  ctx.beginPath(); ctx.ellipse(cx2, baseY, rx - 1, rimRy - 0.5, 0, 0, Math.PI * 2);
+  ctx.strokeStyle = 'rgba(180,180,180,0.5)'; ctx.lineWidth = 0.8; ctx.stroke();
+  ctx.restore();
+}
+
+function drawCakeBody(x,y,w,h,progress,offsetY){
+  if(progress<=0)return;
+  const aw=w*progress, ax=x-aw/2;
+  const ry=y+offsetY;
+  ctx.save();
+  // Çilekli kek gövdesi — pembe tonları
+  const bg=ctx.createLinearGradient(ax,ry,ax+aw,ry+h);
+  bg.addColorStop(0,'#ffb3c6'); bg.addColorStop(.15,'#ff8fab');
+  bg.addColorStop(.5,'#ff6b9d'); bg.addColorStop(.85,'#ff8fab'); bg.addColorStop(1,'#e85a85');
+  roundRect(ctx,ax,ry,aw,h,8); ctx.fillStyle=bg; ctx.fill();
+  // Kek katmanları — sünger doku + çilekli kremalı dolgu şeritleri
+  const lh=h/4;
+  ['rgba(255,255,255,.35)','rgba(220,60,100,.25)','rgba(255,255,255,.35)','rgba(220,60,100,.25)'].forEach((lc,i)=>{
+    roundRect(ctx,ax,ry+i*lh,aw,lh,i===0?8:0); ctx.fillStyle=lc; ctx.fill();
+  });
+  // Çilek parçacıkları (kek içinde noktalar)
+  ctx.save();
+  roundRect(ctx,ax,ry,aw,h,8); ctx.clip();
+  const seed = Math.floor(w*13+h*7);
+  for(let i=0;i<Math.floor(aw*h/180);i++){
+    const sx=ax+((seed*i*53)%Math.floor(aw));
+    const sy=ry+((seed*i*31+17)%Math.floor(h));
+    ctx.fillStyle='rgba(200,30,60,'+(0.35+((i*7)%10)/30)+')';
+    ctx.beginPath(); ctx.arc(sx,sy,1.2+((i*3)%3)*0.4,0,Math.PI*2); ctx.fill();
+  }
+  ctx.restore();
+  // Sol parlaklık
+  const sg=ctx.createLinearGradient(ax,ry,ax+aw*.28,ry);
+  sg.addColorStop(0,'rgba(255,255,255,.22)'); sg.addColorStop(1,'rgba(255,255,255,0)');
+  roundRect(ctx,ax,ry,aw,h,8); ctx.fillStyle=sg; ctx.fill();
+  // Sağ gölge
+  const rg=ctx.createLinearGradient(ax+aw*.72,ry,ax+aw,ry);
+  rg.addColorStop(0,'rgba(0,0,0,0)'); rg.addColorStop(1,'rgba(150,20,50,.28)');
+  roundRect(ctx,ax,ry,aw,h,8); ctx.fillStyle=rg; ctx.fill();
+  ctx.restore();
+}
+
+function drawGanache(x,y,w,ft2,offsetY){
+  const ry=y+offsetY;
+  ctx.save();
+  // Kırmızı çilek sosu — parlak kırmızı
+  const tg=ctx.createRadialGradient(x,ry+3,1,x,ry+3,w/2);
+  tg.addColorStop(0,'#ff4d6d'); tg.addColorStop(.5,'#e63558'); tg.addColorStop(1,'#c8102e');
+  ctx.beginPath(); ctx.ellipse(x,ry+4,w/2,7,0,0,Math.PI*2);
+  ctx.fillStyle=tg; ctx.fill();
+  // Akan çilek sosu damlaları
+  [.07,.16,.27,.38,.5,.62,.73,.84,.93].forEach((pct,i)=>{
+    const dx=x-w/2+w*pct;
+    const speed=0.025+i*.003; const phase=i*1.3;
+    const baseDL=13+i%3*3;
+    const dl=baseDL+Math.sin(ft2*speed+phase)*4+Math.cos(ft2*speed*.7+phase)*2;
+    const dw=4+i%2*2;
+    const dg=ctx.createLinearGradient(dx,ry+4,dx,ry+4+dl);
+    dg.addColorStop(0,'#e63558'); dg.addColorStop(.65,'#c8102e'); dg.addColorStop(1,'rgba(180,15,40,0)');
+    ctx.beginPath(); ctx.ellipse(dx,ry+4+dl*.5,dw/2,dl/2,0,0,Math.PI*2);
+    ctx.fillStyle=dg; ctx.fill();
+  });
+  // Sos üstünde parlaklık
+  ctx.beginPath();
+  ctx.ellipse(x-w*0.18,ry+2,w*0.22,2.5,0,0,Math.PI*2);
+  ctx.fillStyle='rgba(255,200,210,0.55)';
+  ctx.fill();
+  ctx.restore();
+}
+
+function drawCream(x,y,w,offsetY){
+  const ry=y+offsetY;
+  const r=8; const count=Math.floor(w/(r*1.95)); const spacing=w/count; const sx=x-w/2+spacing/2;
+  ctx.save();
+  ctx.beginPath(); ctx.rect(x-w/2,ry-r/2,w,r+4);
+  const fillG=ctx.createLinearGradient(x,ry-r,x,ry+r);
+  fillG.addColorStop(0,'#f0f0f0'); fillG.addColorStop(1,'#e0e0e0');
+  ctx.fillStyle=fillG; ctx.fill();
+  for(let i=0;i<count;i++){
+    const rx=sx+i*spacing;
+    ctx.save(); ctx.beginPath(); ctx.arc(rx,ry,r,0,Math.PI*2);
+    const g=ctx.createRadialGradient(rx-r*.28,ry-r*.28,0,rx,ry,r);
+    g.addColorStop(0,'#ffffff'); g.addColorStop(.45,'#f8f8f8'); g.addColorStop(.8,'#efefef'); g.addColorStop(1,'#d8d8d8');
+    ctx.fillStyle=g; ctx.fill();
+    ctx.beginPath(); ctx.arc(rx,ry,r*.58,-Math.PI*.75,Math.PI*.15);
+    ctx.strokeStyle='rgba(255,255,255,.75)'; ctx.lineWidth=1.2; ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(rx-r*.22,ry-r*.3,r*.17,r*.11,-.4,0,Math.PI*2);
+    ctx.fillStyle='rgba(255,255,255,.92)'; ctx.fill();
+    ctx.restore();
+  }
+  ctx.restore();
+}
+
+/* ─── Tek çilek çizimi (görseldeki gibi yuvarlak & parlak) ─── */
+function drawStrawberry(x, y, size, rotation){
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(rotation || 0);
+  const w = size, h = size * 1.1; // daha yuvarlak oran
+
+  // Zemin gölgesi
+  ctx.beginPath();
+  ctx.ellipse(1, h*0.45+2, w*0.55, h*0.18, 0, 0, Math.PI*2);
+  ctx.fillStyle = 'rgba(120,20,40,0.28)';
+  ctx.fill();
+
+  // Çilek gövdesi — yukarı yuvarlak, aşağı hafif sivri
+  ctx.beginPath();
+  ctx.moveTo(0, h*0.55); // alt uç (hafif)
+  ctx.bezierCurveTo(w*0.65, h*0.40, w*0.70, -h*0.25, w*0.05, -h*0.42);
+  ctx.bezierCurveTo(-w*0.65, -h*0.30, -w*0.70, h*0.40, 0, h*0.55);
+  ctx.closePath();
+  const bodyG = ctx.createRadialGradient(-w*0.22, -h*0.20, 1, w*0.05, h*0.05, w*0.95);
+  bodyG.addColorStop(0, '#ff8292');
+  bodyG.addColorStop(0.40, '#ef3651');
+  bodyG.addColorStop(0.80, '#d11434');
+  bodyG.addColorStop(1, '#98071f');
+  ctx.fillStyle = bodyG;
+  ctx.fill();
+
+  // Alt yarıda hafif koyu gölge (hacim)
+  ctx.save();
+  ctx.beginPath();
+  ctx.moveTo(0, h*0.55);
+  ctx.bezierCurveTo(w*0.65, h*0.40, w*0.70, -h*0.25, w*0.05, -h*0.42);
+  ctx.bezierCurveTo(-w*0.65, -h*0.30, -w*0.70, h*0.40, 0, h*0.55);
+  ctx.closePath();
+  ctx.clip();
+  const shG = ctx.createLinearGradient(0, -h*0.1, 0, h*0.55);
+  shG.addColorStop(0,'rgba(150,10,30,0)');
+  shG.addColorStop(1,'rgba(100,5,20,0.35)');
+  ctx.fillStyle = shG;
+  ctx.fillRect(-w, -h*0.5, w*2, h*1.2);
+  ctx.restore();
+
+  // Çekirdek noktaları — az, küçük, sarımsı (görseldeki gibi)
+  const seeds = [
+    [-w*0.22, -h*0.05],
+    [w*0.20, -h*0.02],
+    [0, h*0.15],
+    [-w*0.30, h*0.20],
+    [w*0.28, h*0.20],
+    [-w*0.05, -h*0.22],
+    [w*0.05, h*0.32]
+  ];
+  seeds.forEach(([sx, sy])=>{
+    ctx.beginPath();
+    ctx.ellipse(sx, sy, w*0.045, w*0.028, 0, 0, Math.PI*2);
+    ctx.fillStyle = '#ffeb8a';
+    ctx.fill();
+  });
+
+  // Büyük parlaklık (sol üst) — görseldeki gibi belirgin
+  ctx.save();
+  ctx.beginPath();
+  ctx.ellipse(-w*0.25, -h*0.20, w*0.18, h*0.22, -0.35, 0, Math.PI*2);
+  const glG = ctx.createRadialGradient(-w*0.25, -h*0.20, 0, -w*0.25, -h*0.20, w*0.22);
+  glG.addColorStop(0, 'rgba(255,230,235,0.95)');
+  glG.addColorStop(0.5, 'rgba(255,200,210,0.45)');
+  glG.addColorStop(1, 'rgba(255,200,210,0)');
+  ctx.fillStyle = glG;
+  ctx.fill();
+  ctx.restore();
+
+  // Küçük ikinci parlaklık noktası
+  ctx.beginPath();
+  ctx.ellipse(w*0.15, -h*0.25, w*0.06, w*0.04, 0, 0, Math.PI*2);
+  ctx.fillStyle = 'rgba(255,240,245,0.85)';
+  ctx.fill();
+
+  // Yeşil yaprak sapı (üstte, küçük)
+  const leafY = -h*0.42;
+  ctx.save();
+  ctx.translate(0, leafY);
+  // 5 yapraklı, belirgin uçlu
+  const leafPoints = 5;
+  const outerR = w*0.42;
+  const innerR = w*0.14;
+  ctx.beginPath();
+  for(let k=0; k<leafPoints*2; k++){
+    const ang = (k/(leafPoints*2)) * Math.PI*2 - Math.PI/2;
+    const r = (k%2===0) ? outerR : innerR;
+    const px = Math.cos(ang) * r;
+    const py = Math.sin(ang) * r * 0.55;
+    if(k===0) ctx.moveTo(px, py);
+    else ctx.lineTo(px, py);
+  }
+  ctx.closePath();
+  const leafG = ctx.createRadialGradient(0, -1, 1, 0, 0, outerR);
+  leafG.addColorStop(0, '#8fdc60');
+  leafG.addColorStop(0.5, '#5bb236');
+  leafG.addColorStop(1, '#2e7a1a');
+  ctx.fillStyle = leafG;
+  ctx.fill();
+  // Yaprak parlaklığı
+  ctx.beginPath();
+  ctx.ellipse(-w*0.10, -w*0.05, w*0.10, w*0.05, -0.3, 0, Math.PI*2);
+  ctx.fillStyle = 'rgba(220,255,180,0.55)';
+  ctx.fill();
+  ctx.restore();
+
+  ctx.restore();
+}
+
+function drawFlame(x,y,t){
+  ctx.save();
+  const noise1=Math.sin(t*.19)*1.8, noise2=Math.sin(t*.31+0.7)*1.2, noise3=Math.cos(t*.13)*0.9;
+  const flicker=noise1+noise2+noise3;
+  const fw=7+Math.abs(Math.sin(t*.18))*2, fh=22+Math.sin(t*.11)*5+Math.cos(t*.23)*2;
+  const og=ctx.createRadialGradient(x,y-fh*.3,1,x,y,fh*1.3);
+  og.addColorStop(0,'rgba(255,210,60,.3)'); og.addColorStop(.5,'rgba(255,140,0,.1)'); og.addColorStop(1,'rgba(255,100,0,0)');
+  ctx.beginPath(); ctx.ellipse(x,y-fh*.2,fw*2.8,fh*1.4,flicker*.04,0,Math.PI*2);
+  ctx.fillStyle=og; ctx.fill();
+  const fg=ctx.createRadialGradient(x,y-fh*.38,1,x,y,fh);
+  fg.addColorStop(0,'#fffde7'); fg.addColorStop(.2,'#ffe082'); fg.addColorStop(.55,'#ff8f00'); fg.addColorStop(.8,'#e65100'); fg.addColorStop(1,'rgba(230,81,0,0)');
+  ctx.beginPath();
+  ctx.moveTo(x,y-fh);
+  ctx.bezierCurveTo(x+fw+flicker,y-fh*.55,x+fw*.85+flicker*.5,y,x,y+2);
+  ctx.bezierCurveTo(x-fw*.85+flicker*.3,y,x-fw-flicker*.8,y-fh*.55,x,y-fh);
+  ctx.fillStyle=fg; ctx.fill();
+  const ig=ctx.createRadialGradient(x,y-fh*.42,0,x,y-fh*.3,fh*.42);
+  ig.addColorStop(0,'rgba(255,255,255,.98)'); ig.addColorStop(.6,'rgba(255,248,200,.5)'); ig.addColorStop(1,'rgba(255,200,50,0)');
+  ctx.beginPath();
+  ctx.moveTo(x,y-fh*.95);
+  ctx.bezierCurveTo(x+fw*.35+flicker*.2,y-fh*.58,x+fw*.28,y-fh*.1,x,y);
+  ctx.bezierCurveTo(x-fw*.28,y-fh*.1,x-fw*.35+flicker*.1,y-fh*.58,x,y-fh*.95);
+  ctx.fillStyle=ig; ctx.fill();
+  const lx=x+flicker*.5, ly=y-fh*.4, lightR=fh*1.8;
+  const lg=ctx.createRadialGradient(lx,ly,0,lx,ly,lightR);
+  lg.addColorStop(0,'rgba(255,200,50,.22)'); lg.addColorStop(.5,'rgba(255,150,30,.06)'); lg.addColorStop(1,'rgba(255,120,0,0)');
+  ctx.beginPath(); ctx.arc(lx,ly,lightR,0,Math.PI*2); ctx.fillStyle=lg; ctx.fill();
+  ctx.restore();
+}
+
+function drawSmoke(s){
+  ctx.save(); ctx.globalAlpha=s.a;
+  const sg=ctx.createRadialGradient(s.x,s.y,0,s.x,s.y,s.r);
+  sg.addColorStop(0,'rgba(220,220,220,1)'); sg.addColorStop(1,'rgba(200,200,200,0)');
+  ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2); ctx.fillStyle=sg; ctx.fill();
+  ctx.restore();
+}
+
+function drawCandle(x,y,h,col1,col2,prog2,ft2,id,offsetY){
+  if(prog2<=0)return;
+  const ch=h*prog2, cy2=y-ch+offsetY, cw=12;
+  ctx.save();
+  const bg=ctx.createLinearGradient(x-cw/2,cy2,x+cw/2,cy2);
+  bg.addColorStop(0,col1); bg.addColorStop(.35,'rgba(255,255,255,.28)'); bg.addColorStop(1,col2);
+  roundRect(ctx,x-cw/2,cy2,cw,ch,4); ctx.fillStyle=bg; ctx.fill();
+  for(let sy=cy2;sy<y+offsetY;sy+=7){
+    ctx.save(); roundRect(ctx,x-cw/2,cy2,cw,ch,4); ctx.clip();
+    ctx.fillStyle='rgba(255,255,255,.1)'; ctx.fillRect(x-cw/2,sy,cw,3.5); ctx.restore();
+  }
+  ctx.beginPath(); ctx.moveTo(x,cy2); ctx.lineTo(x,cy2-8);
+  ctx.strokeStyle='#3e2723'; ctx.lineWidth=2; ctx.stroke();
+  ctx.restore();
+  if(prog2>=1 && candleOn[id]) drawFlame(x,cy2-8,ft2+id*25);
+}
+
+function spawnSmoke(x,y){
+  for(let i=0;i<14;i++){
+    smokes.push({
+      x:x+(Math.random()-0.5)*6, y,
+      r:Math.random()*3+2,
+      dx:(Math.random()-0.5)*0.7, dy:-(Math.random()*1.5+0.6),
+      a:0.6, da:0.016
+    });
+  }
+}
+
+function updateSmokes(){
+  for(let i=smokes.length-1;i>=0;i--){
+    const s=smokes[i];
+    s.x+=s.dx; s.y+=s.dy; s.r+=0.18; s.a-=s.da;
+    if(s.a<=0)smokes.splice(i,1);
+  }
+}
+
+function getLayout(){
+  // iPhone X-15 serisi: yüksek ekranlar (aspect ratio ~19.5:9)
+  // Pastayı ekranın tam ortasına yakın, biraz aşağı yerleştir
+  const baseY=Math.round(H*0.62);
+  const l1W=190*SCALE, l1H=50*SCALE, l1Y=baseY-l1H;
+  const l2W=156*SCALE, l2H=42*SCALE, l2Y=l1Y-l2H-2;
+  const l3W=118*SCALE, l3H=36*SCALE, l3Y=l2Y-l3H-2;
+  return {baseY,l1W,l1H,l1Y,l2W,l2H,l2Y,l3W,l3H,l3Y};
+}
+
+function getCandlePositions(){
+  const {l3Y} = getLayout();
+  const creamY3=l3Y-6;
+  const candleY=creamY3+10;
+  return [-1,0,1].map((offset,i)=>({x:cx+offset*28*SCALE, y:candleY, id:i}));
+}
+
+function updatePhysics(dt){
+  const layout=getLayout();
+  const {l1H,l2H,l3H} = layout;
+  const L1_START=0.05, L1_END=0.25;
+  const L2_START=0.22, L2_END=0.42;
+  const L3_START=0.38, L3_END=0.58;
+  const CAN_START=0.60, CAN_END=0.80;
+
+  function updateLayer(layer,startT,endT,dropHeight){
+    if(prog<startT){ layer.prog=0; layer.y=dropHeight; layer.vy=0; return; }
+    layer.prog=Math.min(1,(prog-startT)/(endT-startT));
+    if(!layer.settled){
+      layer.vy+=GRAVITY*dt; layer.y-=layer.vy*dt;
+      if(layer.y<=0){
+        layer.y=0; layer.vy=-layer.vy*BOUNCE_DAMPING;
+        layer.bounceCount=(layer.bounceCount||0)+1;
+        if(Math.abs(layer.vy)<BOUNCE_THRESHOLD){ layer.y=0; layer.vy=0; layer.settled=true; }
+      }
+    }
+  }
+
+  updateLayer(layers[0],L1_START,L1_END,-l1H*1.5);
+  updateLayer(layers[1],L2_START,L2_END,-l2H*1.5);
+  updateLayer(layers[2],L3_START,L3_END,-l3H*1.5);
+
+  if(prog<CAN_START){ candleLayer.prog=0; candleLayer.y=-60; candleLayer.vy=0; }
+  else{
+    candleLayer.prog=Math.min(1,(prog-CAN_START)/(CAN_END-CAN_START));
+    if(!candleLayer.settled){
+      candleLayer.vy+=GRAVITY*dt; candleLayer.y-=candleLayer.vy*dt;
+      if(candleLayer.y<=0){
+        candleLayer.y=0; candleLayer.vy=-candleLayer.vy*BOUNCE_DAMPING;
+        if(Math.abs(candleLayer.vy)<BOUNCE_THRESHOLD){ candleLayer.y=0; candleLayer.settled=true; }
+      }
+    }
+  }
+}
+
+function handleClick(ex,ey){
+  if(prog<0.85)return;
+  const candles=getCandlePositions();
+  let bestDist = Infinity, bestCandle = null;
+  candles.forEach(cd=>{
+    if(!candleOn[cd.id]) return;
+    const candleTop = cd.y + candleLayer.y - 40;
+    const hitX = Math.abs(ex - cd.x) < 22;
+    const hitY = ey > candleTop - 50 && ey < cd.y + candleLayer.y + 5;
+    if(hitX && hitY){
+      const dist = Math.abs(ex - cd.x);
+      if(dist < bestDist){ bestDist = dist; bestCandle = cd; }
+    }
+  });
+  if(bestCandle){
+    const cd = bestCandle;
+    const candleTop = cd.y + candleLayer.y - 40;
+    candleOn[cd.id] = false;
+    spawnSmoke(cd.x, candleTop);
+    if(candleOn.every(v=>!v)){
+      setTimeout(()=>{ spawnCannon(0,H,true); spawnCannon(W,H,false); }, 100);
+      setTimeout(showBirthday, 700);
+    }
+  }
+}
+
+scene.addEventListener('click',e=>{
+  if(e.target.closest('#giftBtn')) return;
+  const r=scene.getBoundingClientRect();
+  const scaleX=W/r.width, scaleY=H/r.height;
+  handleClick((e.clientX-r.left)*scaleX,(e.clientY-r.top)*scaleY);
+});
+scene.addEventListener('touchstart',e=>{
+  if(e.target.closest('#giftBtn')) return;
+  e.preventDefault();
+  const r=scene.getBoundingClientRect();
+  const scaleX=W/r.width, scaleY=H/r.height;
+  const t=e.touches[0];
+  handleClick((t.clientX-r.left)*scaleX,(t.clientY-r.top)*scaleY);
+},{passive:false});
+
+const bc = document.getElementById('bannerCanvas');
+const bctx = setupHiDPICanvas(bc, W, H);
+let bannerAnim = null;
+
+function drawRibbon(openProg, textProg, y, text, fontSize){
+  const rh = fontSize * 1.7;
+  const notch = rh * 0.42;
+  const fullW = Math.min(W * 0.88, 680) - notch * 2;
+  const rx = cx - fullW/2;
+  const rw = fullW * openProg;
+  bctx.save();
+  if(openProg > 0.01){
+    const foldW=22, foldH=rh*0.55;
+    bctx.beginPath();
+    bctx.moveTo(rx+2,y+rh*0.2); bctx.lineTo(rx-foldW,y+rh*0.5);
+    bctx.lineTo(rx-foldW+4,y+rh*0.5+foldH); bctx.lineTo(rx+2,y+rh*0.8);
+    bctx.closePath();
+    const fg1=bctx.createLinearGradient(rx-foldW,y,rx,y+rh);
+    fg1.addColorStop(0,'#3a006f'); fg1.addColorStop(1,'#2a0050');
+    bctx.fillStyle=fg1; bctx.shadowColor='rgba(0,0,0,0.5)'; bctx.shadowBlur=8; bctx.fill(); bctx.shadowBlur=0;
+  }
+  if(openProg >= 0.99){
+    const ex=rx+rw, foldW=22, foldH=rh*0.55;
+    bctx.beginPath();
+    bctx.moveTo(ex-2,y+rh*0.2); bctx.lineTo(ex+foldW,y+rh*0.5);
+    bctx.lineTo(ex+foldW-4,y+rh*0.5+foldH); bctx.lineTo(ex-2,y+rh*0.8);
+    bctx.closePath();
+    const fg2=bctx.createLinearGradient(ex,y,ex+foldW,y+rh);
+    fg2.addColorStop(0,'#3a006f'); fg2.addColorStop(1,'#2a0050');
+    bctx.fillStyle=fg2; bctx.shadowColor='rgba(0,0,0,0.5)'; bctx.shadowBlur=8; bctx.fill(); bctx.shadowBlur=0;
+  }
+  bctx.beginPath();
+  bctx.moveTo(rx-notch,y+rh/2); bctx.lineTo(rx,y); bctx.lineTo(rx+rw,y);
+  if(openProg>=0.99){ bctx.lineTo(rx+rw+notch,y+rh/2); bctx.lineTo(rx+rw,y+rh); }
+  else { bctx.lineTo(rx+rw,y+rh/2); bctx.lineTo(rx+rw,y+rh); }
+  bctx.lineTo(rx,y+rh); bctx.lineTo(rx-notch,y+rh/2); bctx.closePath();
+  const grad=bctx.createLinearGradient(rx,y,rx,y+rh);
+  grad.addColorStop(0,'#b44fff'); grad.addColorStop(0.18,'#8f2be8'); grad.addColorStop(0.5,'#7b1fa2');
+  grad.addColorStop(0.82,'#6a0dad'); grad.addColorStop(1,'#4a007a');
+  bctx.shadowColor='rgba(0,0,0,0.45)'; bctx.shadowBlur=16; bctx.shadowOffsetY=5;
+  bctx.fillStyle=grad; bctx.fill(); bctx.shadowBlur=0; bctx.shadowOffsetY=0;
+  const midG=bctx.createLinearGradient(rx,y+rh*0.44,rx,y+rh*0.56);
+  midG.addColorStop(0,'rgba(0,0,0,0)'); midG.addColorStop(0.5,'rgba(0,0,0,0.22)'); midG.addColorStop(1,'rgba(0,0,0,0)');
+  bctx.beginPath(); bctx.rect(rx,y+rh*0.44,rw,rh*0.12); bctx.fillStyle=midG; bctx.fill();
+  bctx.beginPath();
+  bctx.moveTo(rx-notch*0.5,y+rh/2); bctx.lineTo(rx,y); bctx.lineTo(rx+rw,y);
+  bctx.lineTo(rx+rw,y+rh*0.42); bctx.lineTo(rx,y+rh*0.42); bctx.lineTo(rx-notch*0.5,y+rh/2);
+  bctx.closePath();
+  const shineG=bctx.createLinearGradient(rx,y,rx,y+rh*0.42);
+  shineG.addColorStop(0,'rgba(255,255,255,0.28)'); shineG.addColorStop(1,'rgba(255s,255,255,0.05)');
+  bctx.fillStyle=shineG; bctx.fill(); bctx.restore();
+  if(textProg > 0){
+    bctx.save();
+    bctx.beginPath();
+    bctx.moveTo(rx-notch,y+rh/2); bctx.lineTo(rx,y); bctx.lineTo(rx+rw,y);
+    bctx.lineTo(openProg>=0.99?rx+rw+notch:rx+rw,y+rh/2);
+    bctx.lineTo(rx+rw,y+rh); bctx.lineTo(rx,y+rh); bctx.closePath(); bctx.clip();
+    bctx.beginPath(); bctx.rect(rx-notch,y,(fullW+notch*2)*textProg,rh); bctx.clip();
+    bctx.font=`bold italic ${fontSize}px Georgia, serif`;
+    bctx.textAlign='center'; bctx.textBaseline='middle';
+    bctx.fillStyle='rgba(40,0,60,0.55)'; bctx.fillText(text,cx+2,y+rh/2+2);
+    bctx.shadowColor='rgba(255,220,255,0.7)'; bctx.shadowBlur=10;
+    bctx.fillStyle='#ffffff'; bctx.fillText(text,cx,y+rh/2);
+    bctx.restore();
+  }
+}
+
+function startBannerAnimation(){
+  document.getElementById('hint').style.opacity='0';
+  const line1='DOĞUM GÜNÜNN KUTLU OLSUUNN';
+  const line2='İYİKİ VARSINNN GÜZELİİMMM';
+  function fitFontSize(text,maxPx,minPx){
+    const testCanvas=document.createElement('canvas');
+    const tctx=testCanvas.getContext('2d');
+    let fs=maxPx;
+    while(fs>minPx){
+      tctx.font=`bold italic ${fs}px Georgia, serif`;
+      const notch=(fs*1.7)*0.42;
+      const available=Math.min(W*0.88,680)-notch*2-24;
+      if(tctx.measureText(text).width<=available) break;
+      fs-=0.5;
+    }
+    return fs;
+  }
+  const fs1=fitFontSize(line1,Math.min(W*0.065,32),13);
+  const fs2=fitFontSize(line2,Math.min(W*0.065,32),13);
+  const y1=H*0.06;
+  let open1=0,text1=0,open2=0,text2=0;
+  const SPEED=0.028;
+  const rh2=fs2*1.7;
+  const {baseY}=getLayout();
+  const y2=baseY+28;
+  function animBanner(){
+    bctx.clearRect(0,0,W,H);
+    if(open1<1) open1=Math.min(1,open1+SPEED);
+    if(open1>0.55) text1=Math.min(1,text1+SPEED*0.85);
+    if(text1>0.65) open2=Math.min(1,open2+SPEED);
+    if(open2>0.55) text2=Math.min(1,text2+SPEED*0.85);
+    drawRibbon(open1,text1,y1,line1,fs1);
+    if(open2>0) drawRibbon(open2,text2,y2,line2,fs2);
+    if(open1<1||text1<1||open2<1||text2<1){ bannerAnim=requestAnimationFrame(animBanner); }
+    else { showGiftButton(y2+rh2); }
+  }
+  bannerAnim=requestAnimationFrame(animBanner);
+}
+
+function showGiftButton(belowY){
+  const btn=document.getElementById('giftBtn');
+  btn.style.top=(belowY+18)+'px';
+  btn.classList.add('visible');
+  btn.addEventListener('touchstart',function(e){
+    e.stopPropagation(); e.preventDefault(); openFlower();
+  },{passive:false,once:true});
+}
+
+/* ════════════════════════════════════════
+   BURST
+════════════════════════════════════════ */
+const burstC=document.getElementById('burstCanvas');
+const burstCtx = setupHiDPICanvas(burstC, W, H);
+const bursts=[];
+const burstCols=['#ff2d55','#ff9500','#ffcc00','#34c759','#af52de','#ff6b9d','#ffffff','#b44fff','#ffe4ec'];
+
+function spawnBurst(){
+  for(let i=0;i<100;i++){
+    const angle=Math.random()*Math.PI*2;
+    const speed=5+Math.random()*12;
+    const type=['rect','circle','star'][Math.floor(Math.random()*3)];
+    bursts.push({
+      x:cx,y:H*0.44,
+      vx:Math.cos(angle)*speed,vy:Math.sin(angle)*speed-4,
+      grav:0.2,drag:0.97,
+      col:burstCols[Math.floor(Math.random()*burstCols.length)],
+      alpha:1,fade:0.011+Math.random()*0.009,
+      rot:Math.random()*Math.PI*2,spin:(Math.random()-.5)*.22,
+      type,w:7+Math.random()*7,h:4+Math.random()*4,r:4+Math.random()*4
+    });
+  }
+}
+
+function animBurst(){
+  burstCtx.clearRect(0,0,W,H);
+  for(let i=bursts.length-1;i>=0;i--){
+    const p=bursts[i];
+    p.vx*=p.drag;p.vy+=p.grav;p.vy*=p.drag;
+    p.x+=p.vx;p.y+=p.vy;p.rot+=p.spin;p.alpha-=p.fade;
+    if(p.alpha<=0||p.y>H+40){bursts.splice(i,1);continue;}
+    burstCtx.save();
+    burstCtx.globalAlpha=p.alpha;burstCtx.fillStyle=p.col;
+    burstCtx.translate(p.x,p.y);burstCtx.rotate(p.rot);
+    if(p.type==='circle'){
+      burstCtx.beginPath();burstCtx.arc(0,0,p.r,0,Math.PI*2);burstCtx.fill();
+    } else if(p.type==='star'){
+      burstCtx.beginPath();
+      for(let j=0;j<10;j++){
+        const a=j*Math.PI/5-Math.PI/2;
+        const r=j%2===0?p.r:p.r*0.4;
+        j===0?burstCtx.moveTo(Math.cos(a)*r,Math.sin(a)*r):burstCtx.lineTo(Math.cos(a)*r,Math.sin(a)*r);
+      }
+      burstCtx.closePath();burstCtx.fill();
+    } else { burstCtx.fillRect(-p.w/2,-p.h/2,p.w,p.h); }
+    burstCtx.restore();
+  }
+  if(bursts.length>0) requestAnimationFrame(animBurst);
+  else burstCtx.clearRect(0,0,W,H);
+}
+
+/* ════════════════════════════════════════
+   KALP ANİMASYONU — tam ekran arka plan
+════════════════════════════════════════ */
+function initHeartAnimation(){
+  const heartCanvas = document.getElementById('heartCanvas');
+  if(!heartCanvas) return;
+
+  const mobile = /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i
+                  .test((navigator.userAgent||'').toLowerCase());
+
+  const hctx = heartCanvas.getContext('2d');
+
+  function resizeHeart(){
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    heartCanvas.width  = Math.round(w * DPR);
+    heartCanvas.height = Math.round(h * DPR);
+    heartCanvas.style.width  = w + 'px';
+    heartCanvas.style.height = h + 'px';
+    // canvas.width sıfırlanınca scale de sıfırlanır — her resize'da yeniden uygula
+    hctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+  resizeHeart();
+  window.addEventListener('resize', resizeHeart);
+
+  const rand = Math.random;
+  const traceCount = mobile ? 30 : 50;
+  const dr = 0.12;
+
+  const CW = window.innerWidth;
+  const CH = window.innerHeight;
+  const baseScale = Math.min(CW, CH) / 420;
+  const s1 = 210 * baseScale, s1y = 13 * baseScale;
+  const s2 = 150 * baseScale, s2y =  9 * baseScale;
+  const s3 =  90 * baseScale, s3y =  5 * baseScale;
+
+  function heartPos(rad){
+    return [
+      Math.pow(Math.sin(rad), 3),
+      -(15*Math.cos(rad) - 5*Math.cos(2*rad) - 2*Math.cos(3*rad) - Math.cos(4*rad))
+    ];
+  }
+  function sc(pos, sx, sy){ return [pos[0]*sx, pos[1]*sy]; }
+
+  const pts = [];
+  for(let a=0; a<Math.PI*2; a+=dr) pts.push(sc(heartPos(a), s1, s1y));
+  for(let a=0; a<Math.PI*2; a+=dr) pts.push(sc(heartPos(a), s2, s2y));
+  for(let a=0; a<Math.PI*2; a+=dr) pts.push(sc(heartPos(a), s3, s3y));
+  const hpc = pts.length;
+
+  const tgt = [];
+  function pulse(kx, ky){
+    const w = window.innerWidth, h = window.innerHeight;
+    for(let j=0; j<hpc; j++){
+      tgt[j] = [kx*pts[j][0] + w/2, ky*pts[j][1] + h/2];
+    }
+  }
+
+  const e = [];
+  for(let j=0; j<hpc; j++){
+    const x = rand() * CW;
+    const y = rand() * CH;
+    e[j] = {
+      vx:0, vy:0,
+      speed: rand()*1.5 + 5,
+      q: ~~(rand()*hpc),
+      D: 2*(j%2) - 1,
+      force: 0.2*rand() + 0.7,
+      f: 'hsla(' + ~~(rand()*40-10) + ',' + ~~(70*rand()+80) + '%,' + ~~(40*rand()+35) + '%,.65)',
+      trace: Array.from({length:traceCount}, ()=>({x, y}))
+    };
+  }
+
+  let htime = 0;
+
+  function heartLoop(){
+    const w = window.innerWidth, h = window.innerHeight;
+
+    hctx.fillStyle = 'rgba(14,21,48,0.18)';
+    hctx.fillRect(0, 0, w, h);
+
+    const n = -Math.cos(htime);
+    pulse((1+n)*.5, (1+n)*.5);
+    htime += ((Math.sin(htime)<0) ? 9 : (n>0.8) ? .2 : 1) * 0.01;
+
+    for(let i=e.length; i--;){
+      const u = e[i];
+      const q = tgt[u.q];
+      const dx = u.trace[0].x - q[0];
+      const dy = u.trace[0].y - q[1];
+      const len = Math.sqrt(dx*dx + dy*dy);
+      if(len < 10){
+        if(rand() > 0.95){ u.q = ~~(rand()*hpc); }
+        else {
+          if(rand() > 0.99) u.D *= -1;
+          u.q = ((u.q + u.D) % hpc + hpc) % hpc;
+        }
+      }
+      u.vx += -dx/len * u.speed;
+      u.vy += -dy/len * u.speed;
+      u.trace[0].x += u.vx;
+      u.trace[0].y += u.vy;
+      u.vx *= u.force;
+      u.vy *= u.force;
+      for(let k=0; k<u.trace.length-1;){
+        const T=u.trace[k], N=u.trace[++k];
+        N.x -= 0.4*(N.x-T.x);
+        N.y -= 0.4*(N.y-T.y);
+      }
+      hctx.fillStyle = u.f;
+      for(let k=0; k<u.trace.length; k++){
+        hctx.fillRect(u.trace[k].x, u.trace[k].y, 1.5, 1.5);
+      }
+    }
+    requestAnimationFrame(heartLoop);
+  }
+  heartLoop();
+}
+
+/* ════════════════════════════════════════
+   openFlower — kalp animasyonunu burada başlat
+════════════════════════════════════════ */
+function openFlower(){
+  const btn=document.getElementById('giftBtn');
+  btn.style.transition='opacity 0.4s'; btn.style.opacity='0'; btn.style.pointerEvents='none';
+
+  const cakeC=document.getElementById('cakeCanvas');
+  const bannerC=document.getElementById('bannerCanvas');
+  const hint=document.getElementById('hint');
+  cakeC.style.transition='opacity 0.5s'; cakeC.style.opacity='0';
+  bannerC.style.transition='opacity 0.5s'; bannerC.style.opacity='0';
+  hint.style.opacity='0';
+
+  const fs=document.getElementById('flowerScreen');
+  fs.style.transition='opacity 0.4s'; fs.style.opacity='1'; fs.classList.add('active');
+
+  setTimeout(()=>{
+    spawnBurst(); requestAnimationFrame(animBurst);
+    document.getElementById('flowerWrap').classList.add('bloom');
+
+    // Yazı
+    setTimeout(()=>{
+      const ribbonWrap=document.getElementById('flowerRibbonWrap');
+      void ribbonWrap.offsetWidth;
+      ribbonWrap.classList.add('show');
+    }, 1500);
+
+    // Kalp animasyonu — yazıdan biraz sonra
+    setTimeout(()=>{
+      const hw = document.getElementById('heartWrap');
+      hw.classList.add('show');
+      initHeartAnimation();
+    }, 1800);
+
+  }, 200);
+}
+
+function showBirthday(){ startBannerAnimation(); }
+
+/* ════════════════════════════════════════
+   PASTA ANA DÖNGÜSÜ
+════════════════════════════════════════ */
+function draw(t){
+  ctx.clearRect(0,0,W,H);
+  const {baseY,l1W,l1H,l1Y,l2W,l2H,l2Y,l3W,l3H,l3Y}=getLayout();
+  const creamY1=l1Y-6, creamY2=l2Y-6, creamY3=l3Y-6;
+  const candleY=creamY3+10;
+
+  const pp=easeOut(clamp(prog/0.06,0,1));
+  drawPlate(cx,baseY,pp);
+
+  const off1=layers[0].y;
+  drawCakeBody(cx,l1Y,l1W,l1H,layers[0].prog,off1);
+  if(layers[0].prog>=0.95){
+    drawGanache(cx,l1Y,l1W,t,off1);
+    drawCream(cx,creamY1,l1W,off1);
+  }
+
+  const off2=layers[1].y;
+  drawCakeBody(cx,l2Y,l2W,l2H,layers[1].prog,off2);
+  if(layers[1].prog>=0.95){
+    drawGanache(cx,l2Y,l2W,t+5,off2);
+    drawCream(cx,creamY2,l2W,off2);
+  }
+
+  const off3=layers[2].y;
+  drawCakeBody(cx,l3Y,l3W,l3H,layers[2].prog,off3);
+  if(layers[2].prog>=0.95){
+    drawGanache(cx,l3Y,l3W,t+10,off3);
+    // Mumları kremden ÖNCE çiz — krem mumların dibini örtsün
+    if(candleLayer.prog>0){
+      const offC=candleLayer.y;
+      [{c1:'#f48fb1',c2:'#c2185b'},{c1:'#ce93d8',c2:'#7b1fa2'},{c1:'#80cbc4',c2:'#00695c'}]
+        .forEach((cd,i)=>{
+          drawCandle(cx+(i-1)*28*SCALE,candleY,65,cd.c1,cd.c2,candleLayer.prog,t,i,offC);
+        });
+    }
+    drawCream(cx,creamY3,l3W,off3);
+    // Sadece üst katta, krem topaklarının üstünde 2 çilek (görseldeki gibi)
+    const sSize3 = 10 * SCALE;
+    drawStrawberry(cx - l3W*0.38, creamY3 - sSize3*0.55 + off3, sSize3, -0.15);
+    drawStrawberry(cx + l3W*0.38, creamY3 - sSize3*0.55 + off3, sSize3, 0.15);
+  }
+
+  // Alttaki iki katmanın kremi (mumla ilgisi yok)
+  updateSmokes();
+  smokes.forEach(s=>drawSmoke(s));
+
+  if(charImg.complete && charImg.naturalWidth>0 && layers[0].prog>=0.5){
+    const {baseY,l1W,l3Y,l3H}=getLayout();
+    const charBottom=baseY+10, charTop=l3Y+layers[2].y+l3H*0.5;
+    const charH=charBottom-charTop;
+    const charW=charImg.naturalWidth*(charH/charImg.naturalHeight);
+    const charX=cx-l1W/2-charW*0.82;
+    ctx.save();
+    ctx.imageSmoothingEnabled=true;
+    ctx.imageSmoothingQuality='high';
+    ctx.globalAlpha=Math.min(1,(layers[0].prog-0.5)*4);
+    ctx.drawImage(charImg,charX,charTop,charW,charH);
+    ctx.restore();
+  }
+
+  if(kittyImg.complete && kittyImg.naturalWidth>0 && layers[0].prog>=0.5){
+    const {baseY,l1W,l3Y,l3H}=getLayout();
+    const charBottom=baseY+10, charTop=l3Y+layers[2].y+l3H*0.5;
+    const charH=(charBottom-charTop)*0.88;
+    const charW=kittyImg.naturalWidth*(charH/kittyImg.naturalHeight);
+    const charX=cx+l1W/2-charW*0.18;
+    const charY=charBottom-charH;
+    ctx.save();
+    ctx.imageSmoothingEnabled=true;
+    ctx.imageSmoothingQuality='high';
+    ctx.globalAlpha=Math.min(1,(layers[0].prog-0.5)*4)*0.92;
+    ctx.drawImage(kittyImg,charX,charY,charW,charH);
+    ctx.restore();
+  }
+}
+
+function loop(ts){
+  if(!lastTime) lastTime=ts;
+  const dt=Math.min((ts-lastTime)/16.67,3);
+  lastTime=ts;
+  if(prog<1) prog+=(dt/60)*(60/ANIM_DURATION*1000)*0.016*3.2;
+  if(prog>1) prog=1;
+  if(prog>=.6) ft+=dt;
+  updatePhysics(dt);
+  draw(ft);
+  if(prog>=0.85&&!textDone){ textDone=true; document.getElementById('hint').style.opacity='1'; }
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
