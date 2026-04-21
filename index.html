@@ -854,7 +854,7 @@ function drawRibbon(openProg, textProg, y, text, fontSize){
   bctx.lineTo(rx+rw,y+rh*0.42); bctx.lineTo(rx,y+rh*0.42); bctx.lineTo(rx-notch*0.5,y+rh/2);
   bctx.closePath();
   const shineG=bctx.createLinearGradient(rx,y,rx,y+rh*0.42);
-  shineG.addColorStop(0,'rgba(255,255,255,0.28)'); shineG.addColorStop(1,'rgba(255s,255,255,0.05)');
+  shineG.addColorStop(0,'rgba(255,255,255,0.28)'); shineG.addColorStop(1,'rgba(255,255,255,0.05)');
   bctx.fillStyle=shineG; bctx.fill(); bctx.restore();
   if(textProg > 0){
     bctx.save();
